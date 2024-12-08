@@ -6,9 +6,9 @@ Holds shared functions across the PyQT tabs
 """
 import json
 
-from PyQt5 import QtWidgets
-from PyQt5.QtGui import QIntValidator, QGuiApplication, QClipboard
-from PyQt5.QtWidgets import QLabel, QLineEdit, QAction, QMenu, QFileDialog
+from PyQt6 import QtWidgets
+from PyQt6.QtGui import QIntValidator, QGuiApplication, QClipboard, QAction
+from PyQt6.QtWidgets import QLabel, QLineEdit, QMenu, QFileDialog
 
 
 def add_stat_to_layout(layout, label, row, force_int=False, placeholder=None, read_only=False):
@@ -84,7 +84,7 @@ def copy_card(winID, height, y=0):
     # Save as local image
     screen = QtWidgets.QApplication.primaryScreen()
     screenshot = screen.grabWindow(winID, y=y, height=height)
-    QGuiApplication.clipboard().setImage(screenshot.toImage(), QClipboard.Clipboard)
+    QGuiApplication.clipboard().setImage(screenshot.toImage())
 
 
 def save_image_action(self, winID, image_type, height=750, y=0):

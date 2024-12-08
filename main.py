@@ -7,6 +7,7 @@ Handles the UI interaction and display for the PyQT frontend
 """
 import sys
 import json
+import os
 
 from app.GunTab import GunTab
 from app.MeleeTab import MeleeTab
@@ -16,8 +17,8 @@ from app.PotionTab import PotionTab
 from app.GrenadeTab import GrenadeTab
 from api.foundryVTT.FoundryTranslator import FoundryTranslator
 
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QTabWidget, QStatusBar)
+from PyQt6.QtGui import QIcon
+from PyQt6.QtWidgets import (QApplication, QMainWindow, QTabWidget, QStatusBar)
 
 
 class Window(QMainWindow):
@@ -78,22 +79,8 @@ class Window(QMainWindow):
 
 
 if __name__ == '__main__':
-    # Specify whether this is local development or application compilation
-    basedir = ""
-    application = False
-
-    # If application compilation, get the folder from which the executable is being executed
-    if application:
-        # First split depending on OS to get the current application name (in case users have modified it)
-        if '/' in sys.executable:
-            current_app_name = sys.executable.split('/')[-1]
-        elif '\\' in sys.executable:
-            current_app_name = sys.executable.split('\\')[-1]
-        else:
-            raise NotADirectoryError("Pathing not found for {}. Please move to another path!".format(sys.executable))
-
-        # Then replace the application name with nothing to get the path
-        basedir = sys.executable.replace(current_app_name, '')
+    #set basedir to the current working directory of the running application
+    basedir = os.getcwd()+"/"
 
     # Define the application
     app = QApplication(sys.argv)
@@ -102,4 +89,4 @@ if __name__ == '__main__':
     # Different checking needed depending on local build or executable run
     window.setWindowIcon(QIcon('resources/images/LootGeneratorIconBlue.ico'))
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

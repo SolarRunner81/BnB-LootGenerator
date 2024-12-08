@@ -4,7 +4,7 @@
 
 Handles the logic and state for the PyQT tab related to relic generation
 """
-from PyQt5.QtGui import QFont, QPixmap
+from PyQt6.QtGui import QFont, QPixmap
 
 from classes.Relic import Relic
 from classes.RelicImage import RelicImage
@@ -13,9 +13,9 @@ from app.tab_utils import add_stat_to_layout, clear_layout, split_effect_text, c
     save_image_action
 from classes.json_reader import get_file_data
 
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import (QComboBox, QGridLayout, QGroupBox, QLabel, QWidget, QPushButton,
+from PyQt6.QtCore import Qt, QTimer
+from PyQt6 import QtCore, QtWidgets
+from PyQt6.QtWidgets import (QComboBox, QGridLayout, QGroupBox, QLabel, QWidget, QPushButton,
                              QCheckBox, QLineEdit, QFileDialog, QTextEdit)
 
 
@@ -37,7 +37,10 @@ class RelicTab(QWidget):
         self.foundry_translator = foundry_translator
 
         # Font to share for section headers
-        font = QFont("Times", 9, QFont.Bold)
+        font = QFont()
+        font.setBold(True)
+        font.setPointSize(9)
+        font.setFamily("Times")
         font.setUnderline(True)
 
         ###################################
@@ -45,7 +48,7 @@ class RelicTab(QWidget):
         ###################################
         relic_stats_group = QGroupBox("Configuration")
         relic_stats_layout = QGridLayout()
-        relic_stats_layout.setAlignment(Qt.AlignTop)
+        relic_stats_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Index counter for gridlayout across all widgets
         idx = 0
@@ -53,7 +56,7 @@ class RelicTab(QWidget):
         ##### Information Separator
         information_separator = QLabel("Relic Information")
         information_separator.setFont(font)
-        information_separator.setAlignment(QtCore.Qt.AlignCenter)
+        information_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         relic_stats_layout.addWidget(information_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -112,7 +115,7 @@ class RelicTab(QWidget):
         ##### Art Separator
         art_separator = QLabel("Custom Art Selection")
         art_separator.setFont(font)
-        art_separator.setAlignment(QtCore.Qt.AlignCenter)
+        art_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         relic_stats_layout.addWidget(art_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -143,7 +146,7 @@ class RelicTab(QWidget):
         ##### External Tools Separator
         api_separator = QLabel("External Tools")
         api_separator.setFont(font)
-        api_separator.setAlignment(QtCore.Qt.AlignCenter)
+        api_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         relic_stats_layout.addWidget(api_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -170,7 +173,7 @@ class RelicTab(QWidget):
         ###################################
         relic_generation_group = QGroupBox("Single-Relic Generation")
         relic_generation_layout = QGridLayout()
-        relic_generation_layout.setAlignment(Qt.AlignTop)
+        relic_generation_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Generate button
         button = QPushButton("Generate Relic")
@@ -194,11 +197,11 @@ class RelicTab(QWidget):
         ###################################
         self.relic_card_group = QGroupBox("Relic Card")
         self.relic_card_layout = QGridLayout()
-        self.relic_card_layout.setAlignment(Qt.AlignTop)
+        self.relic_card_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Give a right-click menu for copying image cards
         self.display_height = 550
-        self.relic_card_group.setContextMenuPolicy(Qt.ActionsContextMenu)
+        self.relic_card_group.setContextMenuPolicy(Qt.ContextMenuPolicy.ActionsContextMenu)
 
         # Enable copy-pasting image cards
         self.relic_card_group.addAction(
@@ -235,7 +238,7 @@ class RelicTab(QWidget):
 
         # Potion Generation Layout
         self.relic_generation_layout = QGridLayout()
-        self.relic_generation_layout.setAlignment(Qt.AlignLeft)
+        self.relic_generation_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.relic_generation_layout.addWidget(relic_stats_group, 0, 0)
         self.relic_generation_layout.addWidget(relic_generation_group, 1, 0)
         self.relic_generation_layout.addWidget(self.relic_card_group, 0, 1, -1, 1)
@@ -297,7 +300,7 @@ class RelicTab(QWidget):
         relic_display = QLabel()
         relic_pixmap = QPixmap(relic.relic_art_path).scaled(300, 300, Qt.KeepAspectRatio,
                                                             transformMode=QtCore.Qt.SmoothTransformation)
-        relic_display.setAlignment(Qt.AlignCenter)
+        relic_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
         relic_display.setPixmap(relic_pixmap)
         self.relic_card_layout.addWidget(relic_display, idx, 0, 1, -1)
         idx += 1

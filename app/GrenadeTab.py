@@ -4,7 +4,7 @@
 
 Handles the logic and state for the PyQT tab related to grenade generation
 """
-from PyQt5.QtGui import QFont, QPixmap
+from PyQt6.QtGui import QFont, QPixmap
 
 from classes.Grenade import Grenade
 from classes.GrenadeImage import GrenadeImage
@@ -13,9 +13,9 @@ from app.tab_utils import add_stat_to_layout, split_effect_text, clear_layout, c
     save_image_action
 from classes.json_reader import get_file_data
 
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import (QComboBox, QGridLayout, QGroupBox, QLabel, QWidget, QPushButton,
+from PyQt6.QtCore import Qt, QTimer
+from PyQt6 import QtCore, QtWidgets
+from PyQt6.QtWidgets import (QComboBox, QGridLayout, QGroupBox, QLabel, QWidget, QPushButton,
                              QLineEdit, QFileDialog, QCheckBox, QTextEdit)
 
 
@@ -37,7 +37,10 @@ class GrenadeTab(QWidget):
         self.foundry_translator = foundry_translator
 
         # Font to share for section headers
-        font = QFont("Times", 9, QFont.Bold)
+        font = QFont()
+        font.setBold(True)
+        font.setPointSize(9)
+        font.setFamily("Times")
         font.setUnderline(True)
 
         ###################################
@@ -45,7 +48,7 @@ class GrenadeTab(QWidget):
         ###################################
         grenade_stats_group = QGroupBox("Configuration")
         grenade_stats_layout = QGridLayout()
-        grenade_stats_layout.setAlignment(Qt.AlignTop)
+        grenade_stats_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Index counter for gridlayout across all widgets
         idx = 0
@@ -53,7 +56,7 @@ class GrenadeTab(QWidget):
         ##### Information Separator
         information_separator = QLabel("Grenade Information")
         information_separator.setFont(font)
-        information_separator.setAlignment(QtCore.Qt.AlignCenter)
+        information_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         grenade_stats_layout.addWidget(information_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -101,7 +104,7 @@ class GrenadeTab(QWidget):
         ##### Art Separator
         art_separator = QLabel("Custom Art Selection")
         art_separator.setFont(font)
-        art_separator.setAlignment(QtCore.Qt.AlignCenter)
+        art_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         grenade_stats_layout.addWidget(art_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -132,7 +135,7 @@ class GrenadeTab(QWidget):
         ##### External Tools Separator
         api_separator = QLabel("External Tools")
         api_separator.setFont(font)
-        api_separator.setAlignment(QtCore.Qt.AlignCenter)
+        api_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         grenade_stats_layout.addWidget(api_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -159,7 +162,7 @@ class GrenadeTab(QWidget):
         ###################################
         grenade_generation_group = QGroupBox("Single-Grenade Generation")
         grenade_generation_layout = QGridLayout()
-        grenade_generation_layout.setAlignment(Qt.AlignTop)
+        grenade_generation_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Generate button
         button = QPushButton("Generate Grenade")
@@ -183,11 +186,11 @@ class GrenadeTab(QWidget):
         ###################################
         self.grenade_card_group = QGroupBox("Grenade Card")
         self.grenade_card_layout = QGridLayout()
-        self.grenade_card_layout.setAlignment(Qt.AlignTop)
+        self.grenade_card_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Give a right-click menu for copying image cards
         self.display_height = 600
-        self.grenade_card_group.setContextMenuPolicy(Qt.ActionsContextMenu)
+        self.grenade_card_group.setContextMenuPolicy(Qt.ContextMenuPolicy.ActionsContextMenu)
 
         # Enable copy-pasting image cards
         self.grenade_card_group.addAction(
@@ -224,7 +227,7 @@ class GrenadeTab(QWidget):
 
         # Potion Generation Layout
         self.grenade_generation_layout = QGridLayout()
-        self.grenade_generation_layout.setAlignment(Qt.AlignLeft)
+        self.grenade_generation_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.grenade_generation_layout.addWidget(grenade_stats_group, 0, 0)
         self.grenade_generation_layout.addWidget(grenade_generation_group, 1, 0)
         self.grenade_generation_layout.addWidget(self.grenade_card_group, 0, 1, -1, 1)
@@ -284,7 +287,7 @@ class GrenadeTab(QWidget):
         grenade_display = QLabel()
         grenade_pixmap = QPixmap(grenade.grenade_art_path).scaled(300, 300, Qt.KeepAspectRatio,
                                                                transformMode=QtCore.Qt.SmoothTransformation)
-        grenade_display.setAlignment(Qt.AlignCenter)
+        grenade_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
         grenade_display.setPixmap(grenade_pixmap)
         self.grenade_card_layout.addWidget(grenade_display, idx, 0, 1, -1)
         idx += 1

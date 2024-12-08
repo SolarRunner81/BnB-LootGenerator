@@ -4,7 +4,7 @@
 
 Handles the logic and state for the PyQT tab related to shield generation
 """
-from PyQt5.QtGui import QFont, QPixmap
+from PyQt6.QtGui import QFont, QPixmap
 
 from classes.Shield import Shield
 from classes.ShieldImage import ShieldImage
@@ -12,9 +12,9 @@ from classes.json_reader import get_file_data
 from app.tab_utils import add_stat_to_layout, clear_layout, split_effect_text, copy_image_action, update_config, \
     save_image_action
 
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import (QComboBox, QGridLayout, QGroupBox, QLabel, QWidget, QPushButton,
+from PyQt6.QtCore import Qt, QTimer
+from PyQt6 import QtCore, QtWidgets
+from PyQt6.QtWidgets import (QComboBox, QGridLayout, QGroupBox, QLabel, QWidget, QPushButton,
                              QCheckBox, QLineEdit, QFileDialog, QTextEdit)
 
 
@@ -36,7 +36,10 @@ class ShieldTab(QWidget):
         self.foundry_translator = foundry_translator
 
         # Font to share for section headers
-        font = QFont("Times", 9, QFont.Bold)
+        font = QFont()
+        font.setBold(True)
+        font.setPointSize(9)
+        font.setFamily("Times")
         font.setUnderline(True)
 
         ###################################
@@ -44,7 +47,7 @@ class ShieldTab(QWidget):
         ###################################
         shield_stats_group = QGroupBox("Configuration")
         shield_stats_layout = QGridLayout()
-        shield_stats_layout.setAlignment(Qt.AlignTop)
+        shield_stats_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Index counter for gridlayout across all widgets
         idx = 0
@@ -52,7 +55,7 @@ class ShieldTab(QWidget):
         ##### Information Separator
         information_separator = QLabel("Shield Information")
         information_separator.setFont(font)
-        information_separator.setAlignment(QtCore.Qt.AlignCenter)
+        information_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         shield_stats_layout.addWidget(information_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -100,7 +103,7 @@ class ShieldTab(QWidget):
         ##### Art Separator
         art_separator = QLabel("Custom Art Selection")
         art_separator.setFont(font)
-        art_separator.setAlignment(QtCore.Qt.AlignCenter)
+        art_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         shield_stats_layout.addWidget(art_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -131,7 +134,7 @@ class ShieldTab(QWidget):
         ##### External Tools Separator
         api_separator = QLabel("External Tools")
         api_separator.setFont(font)
-        api_separator.setAlignment(QtCore.Qt.AlignCenter)
+        api_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         shield_stats_layout.addWidget(api_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -158,7 +161,7 @@ class ShieldTab(QWidget):
         ###################################
         shield_generation_group = QGroupBox("Single-Shield Generation")
         shield_generation_layout = QGridLayout()
-        shield_generation_layout.setAlignment(Qt.AlignTop)
+        shield_generation_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Generate button
         button = QPushButton("Generate Shield")
@@ -182,11 +185,11 @@ class ShieldTab(QWidget):
         ###################################
         self.shield_card_group = QGroupBox("Shield Card")
         self.shield_card_layout = QGridLayout()
-        self.shield_card_layout.setAlignment(Qt.AlignTop)
+        self.shield_card_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Give a right-click menu for copying image cards
         self.display_height = 600
-        self.shield_card_group.setContextMenuPolicy(Qt.ActionsContextMenu)
+        self.shield_card_group.setContextMenuPolicy(Qt.ContextMenuPolicy.ActionsContextMenu)
 
         # Enable copy-pasting image cards
         self.shield_card_group.addAction(
@@ -223,7 +226,7 @@ class ShieldTab(QWidget):
 
         # Potion Generation Layout
         self.shield_generation_layout = QGridLayout()
-        self.shield_generation_layout.setAlignment(Qt.AlignLeft)
+        self.shield_generation_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.shield_generation_layout.addWidget(shield_stats_group, 0, 0)
         self.shield_generation_layout.addWidget(shield_generation_group, 1, 0)
         self.shield_generation_layout.addWidget(self.shield_card_group, 0, 1, -1, 1)
@@ -284,7 +287,7 @@ class ShieldTab(QWidget):
         shield_display = QLabel()
         shield_pixmap = QPixmap(shield.shield_art_path).scaled(300, 300, Qt.KeepAspectRatio,
                                                                transformMode=QtCore.Qt.SmoothTransformation)
-        shield_display.setAlignment(Qt.AlignCenter)
+        shield_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
         shield_display.setPixmap(shield_pixmap)
         self.shield_card_layout.addWidget(shield_display, idx, 0, 1, -1)
         idx += 1

@@ -14,11 +14,13 @@ from classes.GunImage import GunImage
 from app.tab_utils import add_stat_to_layout, copy_image_action, save_image_action, update_config
 from classes.json_reader import get_file_data
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon, QFont
-from PyQt5 import QAxContainer, QtCore, QtWidgets
-from PyQt5.QtWidgets import (QComboBox, QGridLayout, QGroupBox, QLabel, QWidget, QPushButton,
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon, QFont
+from PyQt6 import QtCore, QtWidgets
+from PyQt6.QtWidgets import (QComboBox, QGridLayout, QGroupBox, QLabel, QWidget, QPushButton,
                              QCheckBox, QFileDialog, QLineEdit)
+from PyQt6.QtPdf import QPdfDocument
+from PyQt6.QtPdfWidgets import QPdfView
 
 
 class GunTab(QWidget):
@@ -44,19 +46,22 @@ class GunTab(QWidget):
         ###################################
         base_stats_group = QGroupBox("Configuration")
         base_stats_layout = QGridLayout()
-        base_stats_layout.setAlignment(Qt.AlignTop)
+        base_stats_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Index counter for gridlayout across all widgets
         idx = 0
 
         # Font to share for section headers
-        font = QFont("Times", 9, QFont.Bold)
+        font = QFont()
+        font.setBold(True)
+        font.setPointSize(9)
+        font.setFamily("Times")
         font.setUnderline(True)
 
         ##### Information Separator
         information_separator = QLabel("Gun Information")
         information_separator.setFont(font)
-        information_separator.setAlignment(QtCore.Qt.AlignCenter)
+        information_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         base_stats_layout.addWidget(information_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -143,7 +148,7 @@ class GunTab(QWidget):
         ##### Element Separator
         element_separator = QLabel("Element Selection")
         element_separator.setFont(font)
-        element_separator.setAlignment(QtCore.Qt.AlignCenter)
+        element_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         base_stats_layout.addWidget(element_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -171,8 +176,8 @@ class GunTab(QWidget):
                 element_buttons.addWidget(element_checkbox, 1, i % 3)
             self.element_checkboxes[icon] = element_checkbox
 
-        base_stats_layout.addWidget(QLabel("Select Specific Elements:"), idx, 0, QtCore.Qt.AlignTop)
-        base_stats_layout.addLayout(element_buttons, idx, 1, QtCore.Qt.AlignTop)
+        base_stats_layout.addWidget(QLabel("Select Specific Elements:"), idx, 0, QtCore.Qt.AlignmentFlag.AlignTop)
+        base_stats_layout.addLayout(element_buttons, idx, 1, QtCore.Qt.AlignmentFlag.AlignTop)
         idx += 2
 
         # Setting a custom element damage die
@@ -200,7 +205,7 @@ class GunTab(QWidget):
         ##### Art Separator
         art_separator = QLabel("Custom Art Selection")
         art_separator.setFont(font)
-        art_separator.setAlignment(QtCore.Qt.AlignCenter)
+        art_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         base_stats_layout.addWidget(art_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -239,7 +244,7 @@ class GunTab(QWidget):
         ##### Rules/Misc Separator
         rules_separator = QLabel("Rules/Settings")
         rules_separator.setFont(font)
-        rules_separator.setAlignment(QtCore.Qt.AlignCenter)
+        rules_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         base_stats_layout.addWidget(rules_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -285,7 +290,7 @@ class GunTab(QWidget):
         ##### APIs
         apis_separator = QLabel("External Tools")
         apis_separator.setFont(font)
-        apis_separator.setAlignment(QtCore.Qt.AlignCenter)
+        apis_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         base_stats_layout.addWidget(apis_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -311,7 +316,7 @@ class GunTab(QWidget):
         ###################################
         generation_group = QGroupBox("Single-Gun Generation")
         generation_layout = QGridLayout()
-        generation_layout.setAlignment(Qt.AlignTop)
+        generation_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # PDF Output Name
         self.pdf_line_edit = add_stat_to_layout(generation_layout, "PDF Filename:", 0)
@@ -338,7 +343,7 @@ class GunTab(QWidget):
         ###################################
         multi_group = QGroupBox("Multi-Gun Generation")
         multi_layout = QGridLayout()
-        multi_layout.setAlignment(Qt.AlignTop)
+        multi_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # PDF Output Name
         self.numgun_line_edit = add_stat_to_layout(multi_layout, "# Guns to Generate:", 0, force_int=True)
@@ -361,11 +366,11 @@ class GunTab(QWidget):
         ###################################
         self.gun_card_group = QGroupBox("Gun Card")
         gun_card_layout = QGridLayout()
-        gun_card_layout.setAlignment(Qt.AlignVCenter)
+        gun_card_layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
 
-        self.WebBrowser = QAxContainer.QAxWidget(self)
+        self.WebBrowser = QPdfView(None)
         self.WebBrowser.setFixedHeight(800)
-        self.WebBrowser.setControl("{8856F961-340A-11D0-A96B-00C04FD705A2}")
+        self.WebBrowser.setPageMode(QPdfView.PageMode.MultiPage)
         self.WebBrowser.setStatusTip("If nothing is displaying or the text is not displaying, then either "
                                    "1.) you do not have a local PDF Viewer or 2.) the OS you are on doesn't support annotation rendering.")
         gun_card_layout.addWidget(self.WebBrowser, 0, 1, -1, 1)
@@ -375,12 +380,19 @@ class GunTab(QWidget):
         self.output_name = ""
 
         # Load in Gun Card Template
-        f = Path(os.path.abspath(self.basedir + "output/examples/EXAMPLE_GUN.pdf")).as_uri()
-        self.WebBrowser.dynamicCall('Navigate(const QString&)', f)
+        # f = Path(os.path.abspath(self.basedir + "output/examples/EXAMPLE_GUN.pdf")).as_uri()
+        f = os.path.abspath(os.path.join(os.path.dirname(__file__), "output/examples/EXAMPLE_GUN.pdf"))
+
+        self.document = QPdfDocument(None)
+        self.document.load(f)
+
+        self.WebBrowser.setDocument(self.document)
+        self.WebBrowser.show()
+        # self.WebBrowser.dynamicCall('Navigate(const QString&)', f)
 
         # Give a right-click menu for copying image cards
         self.display_height = 660
-        self.gun_card_group.setContextMenuPolicy(Qt.ActionsContextMenu)
+        self.gun_card_group.setContextMenuPolicy(Qt.ContextMenuPolicy.ActionsContextMenu)
 
         # Enable copy-pasting image cards
         self.gun_card_group.addAction(
@@ -530,8 +542,12 @@ class GunTab(QWidget):
             self.gun_pdf.generate_gun_pdf(self.output_name, gun, color_check, form_check, redtext_check)
 
         # Load in gun card PDF
-        f = Path(os.path.abspath("output/guns/{}.pdf".format(self.output_name))).as_uri()
-        self.WebBrowser.dynamicCall('Navigate(const QString&)', f)
+        f = os.path.abspath(os.path.join(os.path.dirname(__file__), "output/examples/EXAMPLE_GUN.pdf"))
+        self.document.load(f)
+
+        self.WebBrowser.setDocument(self.document)
+        self.WebBrowser.show()
+        # self.WebBrowser.dynamicCall('Navigate(const QString&)', f)
 
         # FoundryVTT Check
         if self.foundry_export_check.isChecked() is True:
@@ -618,5 +634,9 @@ class GunTab(QWidget):
         self.current_pdf = self.output_name
 
         # Load in last generated gun card PDF
-        f = Path(os.path.abspath("output/guns/{}.pdf".format(self.output_name))).as_uri()
-        self.WebBrowser.dynamicCall('Navigate(const QString&)', f)
+        f = os.path.abspath(os.path.join(os.path.dirname(__file__), "output/examples/EXAMPLE_GUN.pdf"))
+        self.document.load(f)
+
+        self.WebBrowser.setDocument(self.document)
+        self.WebBrowser.show()
+        # self.WebBrowser.dynamicCall('Navigate(const QString&)', f)

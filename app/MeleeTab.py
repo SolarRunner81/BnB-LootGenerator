@@ -10,11 +10,11 @@ from classes.MeleeWeapon import MeleeWeapon
 from app.tab_utils import add_stat_to_layout, copy_image_action, save_image_action
 from classes.json_reader import get_file_data
 
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QIcon, QFont, QPixmap, QKeySequence, QClipboard, QGuiApplication
-from PyQt5.QtWidgets import (QComboBox, QGridLayout, QGroupBox, QLabel, QWidget, QPushButton,
-                             QCheckBox, QFileDialog, QLineEdit, QTextEdit, QShortcut, QAction)
+from PyQt6 import QtCore, QtWidgets
+from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtGui import QIcon, QFont, QPixmap, QKeySequence, QGuiApplication, QAction
+from PyQt6.QtWidgets import (QComboBox, QGridLayout, QGroupBox, QLabel, QWidget, QPushButton,
+                             QCheckBox, QFileDialog, QLineEdit, QTextEdit)
 
 
 class MeleeTab(QWidget):
@@ -36,19 +36,22 @@ class MeleeTab(QWidget):
         ###################################
         base_stats_group = QGroupBox("Configuration")
         base_stats_layout = QGridLayout()
-        base_stats_layout.setAlignment(Qt.AlignTop)
+        base_stats_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Index counter for gridlayout across all widgets
         idx = 0
 
         # Font to share for section headers
-        font = QFont("Times", 9, QFont.Bold)
+        font = QFont()
+        font.setBold(True)
+        font.setPointSize(9)
+        font.setFamily("Times")
         font.setUnderline(True)
 
         ##### Information Separator
         information_separator = QLabel("Melee Information")
         information_separator.setFont(font)
-        information_separator.setAlignment(QtCore.Qt.AlignCenter)
+        information_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         base_stats_layout.addWidget(information_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -113,7 +116,7 @@ class MeleeTab(QWidget):
         ##### Element Separator
         element_separator = QLabel("Element Selection")
         element_separator.setFont(font)
-        element_separator.setAlignment(QtCore.Qt.AlignCenter)
+        element_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         base_stats_layout.addWidget(element_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -141,8 +144,8 @@ class MeleeTab(QWidget):
                 element_buttons.addWidget(element_checkbox, 1, i % 3)
             self.element_checkboxes[icon] = element_checkbox
 
-        base_stats_layout.addWidget(QLabel("Select Specific Elements:"), idx, 0, QtCore.Qt.AlignTop)
-        base_stats_layout.addLayout(element_buttons, idx, 1, QtCore.Qt.AlignTop)
+        base_stats_layout.addWidget(QLabel("Select Specific Elements:"), idx, 0, QtCore.Qt.AlignmentFlag.AlignTop)
+        base_stats_layout.addLayout(element_buttons, idx, 1, QtCore.Qt.AlignmentFlag.AlignTop)
         idx += 2
 
         # Setting a custom element damage die
@@ -170,7 +173,7 @@ class MeleeTab(QWidget):
         ##### Art Separator
         art_separator = QLabel("Custom Art Selection")
         art_separator.setFont(font)
-        art_separator.setAlignment(QtCore.Qt.AlignCenter)
+        art_separator.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         base_stats_layout.addWidget(art_separator, idx, 0, 1, -1)
         idx += 1
 
@@ -208,7 +211,7 @@ class MeleeTab(QWidget):
         ###################################
         generation_group = QGroupBox("Single-Melee Generation")
         generation_layout = QGridLayout()
-        generation_layout.setAlignment(Qt.AlignTop)
+        generation_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Generate button
         button = QPushButton("Generate Melee")
@@ -232,11 +235,11 @@ class MeleeTab(QWidget):
         ###################################
         self.melee_card_group = QGroupBox("Melee Card")
         self.melee_card_layout = QGridLayout()
-        self.melee_card_layout.setAlignment(Qt.AlignTop)
+        self.melee_card_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Give a right-click menu for copying image cards
         self.display_height = 750
-        self.melee_card_group.setContextMenuPolicy(Qt.ActionsContextMenu)
+        self.melee_card_group.setContextMenuPolicy(Qt.ContextMenuPolicy.ActionsContextMenu)
 
         # Enable copy-pasting image cards
         self.melee_card_group.addAction(
@@ -263,7 +266,7 @@ class MeleeTab(QWidget):
 
         # melee Generation Layout
         self.melee_generation_layout = QGridLayout()
-        self.melee_generation_layout.setAlignment(Qt.AlignLeft)
+        self.melee_generation_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.melee_generation_layout.addWidget(base_stats_group, 0, 0)
         self.melee_generation_layout.addWidget(generation_group, 1, 0)
         self.melee_generation_layout.addWidget(self.melee_card_group, 0, 1, -1, 1)
@@ -372,7 +375,7 @@ class MeleeTab(QWidget):
         melee_display = QLabel()
         melee_pixmap = QPixmap(melee.melee_art_path).scaled(300, 300, Qt.KeepAspectRatio,
                                                             transformMode=QtCore.Qt.SmoothTransformation)
-        melee_display.setAlignment(Qt.AlignCenter)
+        melee_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
         melee_display.setPixmap(melee_pixmap)
         self.melee_card_layout.addWidget(melee_display, idx, 0, 1, -1)
         idx += 1
@@ -490,7 +493,7 @@ class MeleeTab(QWidget):
         # Build a dictionary of button object IDs
         melee_element_checkboxes = dict()
         melee_elements = QGridLayout()
-        melee_elements.setAlignment(Qt.AlignCenter)
+        melee_elements.setAlignment(Qt.AlignmentFlag.AlignCenter)
         for i, icon in enumerate(self.element_icon_paths.keys()):
             element_checkbox = QCheckBox()
             element_checkbox.setIcon(QIcon(f"resources/images/element_icons/{self.element_icon_paths[icon]}"))
@@ -501,8 +504,8 @@ class MeleeTab(QWidget):
                 melee_elements.addWidget(element_checkbox, 1, i % 3)
             melee_element_checkboxes[icon] = element_checkbox
 
-        self.melee_card_layout.addWidget(QLabel("Elements:"), idx, 0, QtCore.Qt.AlignTop)
-        self.melee_card_layout.addLayout(melee_elements, idx, 1, QtCore.Qt.AlignTop)
+        self.melee_card_layout.addWidget(QLabel("Elements:"), idx, 0, QtCore.Qt.AlignmentFlag.AlignTop)
+        self.melee_card_layout.addLayout(melee_elements, idx, 1, QtCore.Qt.AlignmentFlag.AlignTop)
         idx += 2
 
         # Set elements to checked
