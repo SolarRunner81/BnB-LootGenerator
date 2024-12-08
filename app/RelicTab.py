@@ -298,8 +298,8 @@ class RelicTab(QWidget):
 
         # Pixmap for the Relic Image
         relic_display = QLabel()
-        relic_pixmap = QPixmap(relic.relic_art_path).scaled(300, 300, Qt.KeepAspectRatio,
-                                                            transformMode=QtCore.Qt.SmoothTransformation)
+        relic_pixmap = QPixmap(relic.relic_art_path).scaled(300, 300, Qt.AspectRatioMode.KeepAspectRatio,
+                                                            transformMode=QtCore.Qt.TransformationMode.SmoothTransformation)
         relic_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
         relic_display.setPixmap(relic_pixmap)
         self.relic_card_layout.addWidget(relic_display, idx, 0, 1, -1)

@@ -285,8 +285,8 @@ class GrenadeTab(QWidget):
 
         # Pixmap for the Grenade Image
         grenade_display = QLabel()
-        grenade_pixmap = QPixmap(grenade.grenade_art_path).scaled(300, 300, Qt.KeepAspectRatio,
-                                                               transformMode=QtCore.Qt.SmoothTransformation)
+        grenade_pixmap = QPixmap(grenade.grenade_art_path).scaled(300, 300, Qt.AspectRatioMode.KeepAspectRatio,
+                                                            transformMode=QtCore.Qt.TransformationMode.SmoothTransformation)
         grenade_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
         grenade_display.setPixmap(grenade_pixmap)
         self.grenade_card_layout.addWidget(grenade_display, idx, 0, 1, -1)

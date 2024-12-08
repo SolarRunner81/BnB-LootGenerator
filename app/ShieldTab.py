@@ -285,8 +285,8 @@ class ShieldTab(QWidget):
 
         # Pixmap for the Shield Image
         shield_display = QLabel()
-        shield_pixmap = QPixmap(shield.shield_art_path).scaled(300, 300, Qt.KeepAspectRatio,
-                                                               transformMode=QtCore.Qt.SmoothTransformation)
+        shield_pixmap = QPixmap(shield.shield_art_path).scaled(300, 300, Qt.AspectRatioMode.KeepAspectRatio,
+                                                            transformMode=QtCore.Qt.TransformationMode.SmoothTransformation)
         shield_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
         shield_display.setPixmap(shield_pixmap)
         self.shield_card_layout.addWidget(shield_display, idx, 0, 1, -1)

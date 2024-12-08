@@ -250,8 +250,8 @@ class PotionTab(QWidget):
 
         # Pixmap for the Potion Image
         potion_display = QLabel()
-        potion_pixmap = QPixmap(potion.potion_art_path).scaled(300, 300, Qt.KeepAspectRatio,
-                                                               transformMode=QtCore.Qt.SmoothTransformation)
+        potion_pixmap = QPixmap(potion.potion_art_path).scaled(300, 300, Qt.AspectRatioMode.KeepAspectRatio,
+                                                            transformMode=QtCore.Qt.TransformationMode.SmoothTransformation)
         potion_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
         potion_display.setPixmap(potion_pixmap)
         self.potion_card_layout.addWidget(potion_display, idx, 0, 1, -1)
