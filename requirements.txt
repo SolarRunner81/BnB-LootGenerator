@@ -7,5 +7,5 @@ Pillow
 requests
 tqdm
 pikepdf
-PyQt5==5.15.9
+PyQt6==6.7.1
 pyinstaller
