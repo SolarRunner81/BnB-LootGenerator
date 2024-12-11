@@ -376,11 +376,11 @@ class GunTab(QWidget):
         gun_card_layout.addWidget(self.WebBrowser, 0, 1, -1, 1)
 
         # Need to check if attempting to re-save when the PDF name is already taken
-        self.current_pdf = "EXAMPLE_GUN.pdf"
+        self.current_pdf = "EXAMPLE.pdf"
         self.output_name = ""
 
         # Load in Gun Card Template
-        f = os.path.abspath(os.path.join(self.basedir, "output/examples/EXAMPLE_GUN.pdf"))
+        f = os.path.abspath("output/guns/{}".format(self.current_pdf))
 
         self.document = QPdfDocument(None)
         self.document.load(f)
