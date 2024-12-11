@@ -5,7 +5,7 @@
 Class to generate the PDF of the BnB Card Design for a given Gun.
 """
 import os
-import fitz
+import pymupdf
 import pdfrw
 import requests
 import pikepdf
@@ -175,11 +175,11 @@ class GunPDF:
         :param image: image path to use
         :param position: where in the template to place the image
         """
-        file_handle = fitz.open(pdf_path)
+        file_handle = pymupdf.open(pdf_path)
 
         page = file_handle[int(position['page']) - 1]
         page.insert_image(
-            fitz.Rect(position['x0'], position['y0'],
+            pymupdf.Rect(position['x0'], position['y0'],
             position['x1'], position['y1']),
             filename=image
         )
