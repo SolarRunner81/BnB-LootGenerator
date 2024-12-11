@@ -380,15 +380,12 @@ class GunTab(QWidget):
         self.output_name = ""
 
         # Load in Gun Card Template
-        # f = Path(os.path.abspath(self.basedir + "output/examples/EXAMPLE_GUN.pdf")).as_uri()
-        f = os.path.abspath(os.path.join(os.path.dirname(__file__), "output/examples/EXAMPLE_GUN.pdf"))
+        f = os.path.abspath(os.path.join(self.basedir, "output/examples/EXAMPLE_GUN.pdf"))
 
         self.document = QPdfDocument(None)
         self.document.load(f)
 
         self.WebBrowser.setDocument(self.document)
-        self.WebBrowser.show()
-        # self.WebBrowser.dynamicCall('Navigate(const QString&)', f)
 
         # Give a right-click menu for copying image cards
         self.display_height = 660
@@ -542,12 +539,10 @@ class GunTab(QWidget):
             self.gun_pdf.generate_gun_pdf(self.output_name, gun, color_check, form_check, redtext_check)
 
         # Load in gun card PDF
-        f = os.path.abspath(os.path.join(os.path.dirname(__file__), "output/examples/EXAMPLE_GUN.pdf"))
+        f = os.path.abspath("output/guns/{}.pdf".format(self.output_name))
         self.document.load(f)
 
         self.WebBrowser.setDocument(self.document)
-        self.WebBrowser.show()
-        # self.WebBrowser.dynamicCall('Navigate(const QString&)', f)
 
         # FoundryVTT Check
         if self.foundry_export_check.isChecked() is True:
@@ -634,9 +629,7 @@ class GunTab(QWidget):
         self.current_pdf = self.output_name
 
         # Load in last generated gun card PDF
-        f = os.path.abspath(os.path.join(os.path.dirname(__file__), "output/examples/EXAMPLE_GUN.pdf"))
+        f = os.path.abspath("output/guns/{}.pdf".format(self.output_name))
         self.document.load(f)
 
         self.WebBrowser.setDocument(self.document)
-        self.WebBrowser.show()
-        # self.WebBrowser.dynamicCall('Navigate(const QString&)', f)
