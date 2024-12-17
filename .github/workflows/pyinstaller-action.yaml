@@ -42,11 +42,10 @@ jobs:
             TARGET: windows
             CMD_BUILD: |
                 pyinstaller -F -w -i resources/images/LootGeneratorIconBlue.ico -n main main.py &&
-                cd dist/ &&
-                mkdir temp_package &&
-                mv main.exe temp_package/BnBLootGenerator.exe &&
-                cp -r ../api ../output ../resources temp_package &&
-                zip -r9 BnBLootGeneratorV1.7.2_Windows.zip temp_package/
+                mkdir dist/temp_package &&
+                mv dist/main.exe dist/temp_package/BnBLootGenerator.exe &&
+                cp -r api output resources dist/temp_package/ &&
+                zip -r9 BnBLootGeneratorV1.7.2_Windows.zip dist/temp_package/
             OUT_FILE_NAME: BnBLootGeneratorV1.7.2_Windows.zip
             ASSET_MIME: application/zip
     steps:
