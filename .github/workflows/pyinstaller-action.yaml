@@ -45,7 +45,7 @@ jobs:
                 cd dist/ &&
                 mkdir temp_package &&
                 mv main.exe temp_package/BnBLootGenerator.exe &&
-                cp -r ../{api,output,resources} temp_package/ &&
+                cp -r ../api ../output ../resources temp_package &&
                 zip -r9 BnBLootGeneratorV1.7.2_Windows.zip temp_package/
             OUT_FILE_NAME: BnBLootGeneratorV1.7.2_Windows.zip
             ASSET_MIME: application/zip
